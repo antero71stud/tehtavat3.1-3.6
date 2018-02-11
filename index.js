@@ -1,8 +1,16 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 app.use(bodyParser.json())
+app.use(morgan(':method :url :data :status :res[content-length] - :response-time ms'))
+/*app.use(morgan('tiny'))*/
+
+morgan.token('data', function (req, res) 
+{ 
+    return JSON.stringify(req.body)
+})
 
 let persons = 
     [
@@ -40,10 +48,10 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    console.log('id ',id)
+    /*console.log('id ',id)*/
     const person = persons.find(p => p.id === id)
     if ( person ) {
-        console.log(person)
+        /*console.log(person)*/
         response.json(person)    
     } else {
         console.log(`person ${id} not found`)
@@ -82,11 +90,6 @@ app.post('/api/persons', (request, response) => {
     if(oldperson !== undefined){
         return response.status(409).json({error: 'name must be unique'})
     }
-
-    console.log('oldperson ',oldperson, typeof oldperson)
-
-
-
     const person = {
       name: body.name,
       number: body.number,
