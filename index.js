@@ -28,6 +28,11 @@ let persons =
           }
     ]
 
+const generateId = () => {
+    const max=1000000000
+    return Math.floor(Math.random() * max);
+}
+
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
@@ -60,6 +65,24 @@ app.get('/api/info', (request, response) => {
     const responseText = `puhelinluettelossa on ${maara}:n henkilön tiedot<br /><br />${new Date()}`
     response.send(responseText)
 })
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (body.name === undefined || body.number === undefined) {
+      return response.status(400).json({error: 'name or number missing'})
+    }
+  
+    const person = {
+      name: body.name,
+      number: body.number,
+      id: generateId()
+    }
+  
+    persons = persons.concat(person)
+  
+    response.json(person)
+  })
 
 const PORT = 3011
 app.listen(PORT, () => {
