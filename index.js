@@ -72,7 +72,21 @@ app.post('/api/persons', (request, response) => {
     if (body.name === undefined || body.number === undefined) {
       return response.status(400).json({error: 'name or number missing'})
     }
+
+    if(body.name.trim().length===0 || body.number.trim().length===0){
+        return response.status(400).json({error: 'name and number is mandatory'})
+    }
   
+    const oldperson = persons.find(p => p.name === body.name)
+
+    if(oldperson !== undefined){
+        return response.status(409).json({error: 'name must be unique'})
+    }
+
+    console.log('oldperson ',oldperson, typeof oldperson)
+
+
+
     const person = {
       name: body.name,
       number: body.number,
