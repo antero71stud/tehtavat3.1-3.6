@@ -33,6 +33,20 @@ app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
+app.get('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    console.log('id ',id)
+    const person = persons.find(p => p.id === id)
+    if ( person ) {
+        console.log(person)
+        response.json(person)    
+    } else {
+        console.log(`person ${id} not found`)
+        response.status(404).end()
+    }
+})
+
+
 app.get('/api/info', (request, response) => {
     const maara = persons.length
     const responseText = `puhelinluettelossa on ${maara}:n henkilön tiedot<br /><br />${new Date()}`
