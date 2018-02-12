@@ -20,9 +20,21 @@ const person = new Person({
   number: args[1]
 })
 
-person
-  .save()
-  .then(response => {
-    console.log(`lisätään henkilö ${args[0]} numero ${args[1]} luetteloon`)
+if (args.length !== 0){
+  person
+    .save()
+    .then(response => {
+      console.log(`lisätään henkilö ${args[0]} numero ${args[1]} luetteloon`)
+      mongoose.connection.close()
+    })
+} else {
+  console.log('Puhelinluettelo:')
+  Person
+  .find({})
+  .then(result => {
+    result.forEach(person => {
+      console.log(person.name, person.number)
+    })
     mongoose.connection.close()
   })
+}
