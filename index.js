@@ -7,7 +7,7 @@ const cors = require('cors')
 app.use(bodyParser.json())
 app.use(cors())
 app.use(morgan(':method :url :data :status :res[content-length] - :response-time ms'))
-/*app.use(morgan('tiny'))*/
+app.use(express.static('build'))
 
 morgan.token('data', function (req, res) 
 { 
